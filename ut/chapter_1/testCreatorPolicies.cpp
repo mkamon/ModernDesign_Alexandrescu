@@ -2,10 +2,17 @@
 
 #include "chapter_1/CreatorPolicies.hpp"
 #include "Widgets/ExampleWidgets.hpp"
+#include "Utils/PointerHandler.hpp"
 
 
-TEST(Policy, temp)
+TEST(CreatorPolicyTest, PrototypeCreatorTest)
 {
-
-    ASSERT_TRUE(true);
+    //given
+    const int expectedValue = 5;
+    widgets::CloneableWidget cloneable(expectedValue);
+    //when
+    policy::PrototypeCreator<widgets::CloneableWidget> creator(&cloneable);
+    auto clone = utils::wrap_in_unique<widgets::CloneableWidget>(creator.create());
+    //then
+    ASSERT_EQ(expectedValue, clone.get()->get());
 }

@@ -28,7 +28,7 @@ namespace policy
     template <typename T>
     struct PrototypeCreator
     {
-        PrototypeCreator(T* _prototype = nullptr)
+        explicit PrototypeCreator(T* _prototype = nullptr)
                 : prototype{_prototype}
         {}
 
