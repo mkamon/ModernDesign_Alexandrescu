@@ -34,7 +34,7 @@ namespace policy
 
         [[nodiscard]] T* create() const
         {
-            return prototype == nullptr ? nullptr : prototype->clone()
+            return prototype == nullptr ? nullptr : prototype->clone();
         }
 
         [[nodiscard]] T* getPrototype() noexcept {

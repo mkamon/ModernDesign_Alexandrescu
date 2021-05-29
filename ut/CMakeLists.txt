@@ -1,9 +1,13 @@
-enable_testing()
+find_package( GTest REQUIRED )
+include_directories(${GTEST_INCLUDE_DIRS})
+
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-add_definitions( "-Wall -pthread -std=c++17 -g" )
-
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src/Common)
+include_directories(${CMAKE_SOURCE_DIR}/src/byBook)
 
-add_executable( test testMain.cpp )
-target_link_libraries( test dummyLib gtest gtest_main ${GTEST_LIBRARIES} pthread)
-add_test( test test )
+add_subdirectory(chapter_1)
+
+add_executable( testMain testMain.cpp )
+target_link_libraries( testMain  gtest gtest_main ${GTEST_LIBRARIES} pthread dummyLib)
+add_test( NAME testMain COMMAND testMain )

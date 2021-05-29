@@ -1,8 +1,9 @@
 cmake_minimum_required (VERSION 3.0)
-project( CODEWARS )
+project( ModernDesign_AAlexandrescu )
 
-find_package( GTest REQUIRED )
-include_directories(${GTEST_INCLUDE_DIRS})
-
+add_definitions( "-Wall -pthread -std=c++17 -g" )
 add_subdirectory(src)
+
+enable_testing()
+include(CTest)
 add_subdirectory(ut)
