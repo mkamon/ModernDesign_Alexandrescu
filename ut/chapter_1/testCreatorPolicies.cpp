@@ -10,11 +10,20 @@ TEST(CreatorPolicyTest, PrototypeCreatorTest)
 {
     //given
     const int expectedValue = 5;
-    widgets::CloneableWidget cloneable(expectedValue);
     widgets::WidgetManager<policy::PrototypeCreator, widgets::CloneableWidget> creator;
-    creator.setPrototype(&cloneable);
+    creator.setPrototype(new widgets::CloneableWidget (expectedValue));
     //when
     auto clone = utils::wrap_in_unique<widgets::CloneableWidget>(creator.create());
     //then
     ASSERT_EQ(expectedValue, clone.get()->get());
+}
+
+TEST(WidgetManagerTest, shouldCompileWhenSwitchPrototypeMethodNotUsed)
+{
+    //given
+    widgets::WidgetManager<policy::OpNewCreator, widgets::ConcreteWidget> creator;
+    //when
+    auto newWidget = utils::wrap_in_unique(creator.create());
+    //then
+    ASSERT_EQ(widgets::defaultWidgetValue, newWidget->get());
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdlib>
-
+#include <memory>
 namespace policy
 {
     template <typename T>
@@ -43,13 +43,13 @@ namespace policy
         }
 
         [[nodiscard]] T* getPrototype() noexcept {
-            return prototype;
+            return prototype.get();
         }
         void setPrototype(T* _prototype) noexcept {
-            prototype = _prototype;
+            prototype.reset(_prototype);
         }
     private:
-        T* prototype = nullptr;
+        std::unique_ptr<T> prototype = nullptr;
 
     protected:
         virtual ~PrototypeCreator() = default;

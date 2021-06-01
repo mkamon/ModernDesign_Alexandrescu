@@ -4,11 +4,13 @@
 
 namespace widgets
 {
+    constexpr auto defaultWidgetValue = 0;
+
     class ConcreteWidget
     {
-        int x = 0;
+        int x = defaultWidgetValue;
     public:
-        explicit ConcreteWidget(int x = 0);
+        explicit ConcreteWidget(int x = defaultWidgetValue);
         ~ConcreteWidget() = default;
 
         [[nodiscard]] int get() const noexcept;
@@ -17,7 +19,7 @@ namespace widgets
     class CloneableWidget : public ConcreteWidget, public Cloneable<CloneableWidget>
     {
     public:
-        explicit CloneableWidget(int x=0);
+        explicit CloneableWidget(int x = defaultWidgetValue);
         [[nodiscard]] CloneableWidget* clone() const override;
 
     };
