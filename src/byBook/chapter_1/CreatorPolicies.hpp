@@ -10,6 +10,9 @@ namespace policy
         {
             return new T;
         }
+
+    protected:
+        virtual ~OpNewCreator() = default;
     };
 
     template <typename  T>
@@ -23,6 +26,8 @@ namespace policy
             }
             return new(buf) T;
         }
+    protected:
+        virtual ~MallocCreator() = default;
     };
 
     template <typename T>
@@ -45,6 +50,9 @@ namespace policy
         }
     private:
         T* prototype = nullptr;
+
+    protected:
+        virtual ~PrototypeCreator() = default;
     };
 
 }
