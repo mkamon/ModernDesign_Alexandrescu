@@ -5,7 +5,6 @@
 #include "Widgets/ExampleWidgets.hpp"
 #include "Utils/PointerHandler.hpp"
 
-
 TEST(CreatorPolicyTest, PrototypeCreatorTest)
 {
     //given
