@@ -8,6 +8,11 @@ ConcreteWidget::ConcreteWidget(int x) : x{x}
     std::cout << "ConcreteWidget constructor with x=" << x << std::endl;
 }
 
+ConcreteWidget::ConcreteWidget( const ConcreteWidget &other)
+{
+    x = other.x;
+}
+
 int ConcreteWidget::get() const noexcept
 {
     return x;

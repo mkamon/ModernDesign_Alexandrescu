@@ -11,6 +11,7 @@ namespace widgets
         int x = defaultWidgetValue;
     public:
         explicit ConcreteWidget(int x = defaultWidgetValue);
+        ConcreteWidget( const ConcreteWidget &other);
         ~ConcreteWidget() = default;
 
         [[nodiscard]] int get() const noexcept;
