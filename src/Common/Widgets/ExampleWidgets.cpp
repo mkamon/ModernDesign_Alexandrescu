@@ -39,3 +39,14 @@ int TwoArgsWidget::getY() const noexcept
 {
     return y;
 } 
+
+NonPolimorphicWidget::NonPolimorphicWidget(int x)
+    : x{x}
+{}
+
+int NonPolimorphicWidget::getX() const noexcept
+{
+    return x;
+}
+
+

@@ -30,6 +30,18 @@ TEST(IntToTypeTest, shouldCompilePolimorphicWidgetWithCloneableInterface)
 //     FAIL() << "Compilation should not succeed";
 // }
 
+
+TEST(IntToTypeTest, shouldReturnNonPolimorphicWidgetByValue)
+{
+    //given 
+    widgets::NonPolimorphicWidget widget;
+    typeSpecialization::NiftyContainer<widgets::NonPolimorphicWidget, false> container;
+    //when 
+    auto clone = container.create(&widget);
+    //then
+    ASSERT_EQ(clone.getX(), widget.getX()); 
+}
+
 TEST(TypeToTypeTest, wrapperShouldCreateTwoArgWidgetWithOnlySingleArgument)
 {
     //given
