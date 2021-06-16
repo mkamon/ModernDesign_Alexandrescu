@@ -13,7 +13,7 @@ ConcreteWidget::ConcreteWidget( const ConcreteWidget &other)
     x = other.x;
 }
 
-int ConcreteWidget::get() const noexcept
+int ConcreteWidget::getX() const noexcept
 {
     return x;
 }
@@ -26,5 +26,16 @@ CloneableWidget::CloneableWidget(int x)
 
 CloneableWidget* CloneableWidget::clone() const
 {
-    return new CloneableWidget(get());
+    return new CloneableWidget(getX());
 }
+
+TwoArgsWidget::TwoArgsWidget(int x, int y)
+    : ConcreteWidget(x), y{y}
+{
+
+}  
+
+int TwoArgsWidget::getY() const noexcept 
+{
+    return y;
+} 

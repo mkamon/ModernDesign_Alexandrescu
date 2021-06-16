@@ -4,24 +4,36 @@
 
 namespace widgets
 {
-    constexpr auto defaultWidgetValue = 0;
+    constexpr auto defaultWidgetXValue = 3;
+    constexpr auto defaultWidgetYValue = 5;
 
     class ConcreteWidget
     {
-        int x = defaultWidgetValue;
+        int x = defaultWidgetXValue;
     public:
-        explicit ConcreteWidget(int x = defaultWidgetValue);
+        explicit ConcreteWidget(int x = defaultWidgetXValue);
         ConcreteWidget( const ConcreteWidget &other);
         ~ConcreteWidget() = default;
 
-        [[nodiscard]] int get() const noexcept;
+        [[nodiscard]] int getX() const noexcept;
     };
 
     class CloneableWidget : public ConcreteWidget, public Cloneable<CloneableWidget>
     {
     public:
-        explicit CloneableWidget(int x = defaultWidgetValue);
+        explicit CloneableWidget(int x = defaultWidgetXValue);
         [[nodiscard]] CloneableWidget* clone() const override;
 
     };
+
+
+    class TwoArgsWidget : public ConcreteWidget
+    {
+        int y = defaultWidgetYValue;
+    public:
+        TwoArgsWidget(int x, int y);
+
+        [[nodiscard]] int getY() const noexcept;
+    };
+
 }
