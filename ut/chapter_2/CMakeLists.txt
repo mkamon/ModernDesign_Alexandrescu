@@ -9,3 +9,7 @@ add_test( NAME TestMapToType COMMAND TestMapToType )
 add_executable( TestConvertibility testConversion.cpp )
 target_link_libraries( TestConvertibility gtest gtest_main ${GTEST_LIBRARIES} pthread commonLib)
 add_test( NAME TestConvertibility COMMAND TestConvertibility )
+
+add_executable( TestTypeTraits testTypeTraits.cpp )
+target_link_libraries( TestTypeTraits gtest gtest_main ${GTEST_LIBRARIES} pthread commonLib)
+add_test( NAME TestTypeTraits COMMAND TestTypeTraits )
