@@ -56,5 +56,34 @@ namespace TL
         using Result = typename TypeAt<Tail, index - 1>::Result; 
     };
 
+    /////////////// Appending to TypeList /////////////
+
+    template <typename TList, typename T>
+    struct Append;
+
+    template <>
+    struct Append<NullType, NullType>
+    {
+        using Result = NullType;
+    };
+
+    template <typename T>
+    struct Append<NullType, T>
+    {
+        using Result = TYPELIST_1(T);
+    };
+
+    template <typename Head, typename Tail>
+    struct Append<NullType, TypeList<Head, Tail>>
+    {
+        using Result = TypeList<Head, Tail>;
+    };
+
+    template <typename Head, typename Tail, typename T>
+    struct Append<TypeList<Head,Tail>, T>
+    {
+        using Result =  TypeList< Head,
+            typename Append<Tail, T>::Result >;
+    };
 
 }

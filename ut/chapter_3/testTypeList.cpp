@@ -39,3 +39,42 @@ TEST(TypeListTest, typeListTypeAtIndexShouldReturnConcreteWidget)
 //     ASSERT_GE(index, TL::Length<TestTypeList>::value) << "Index does not overflow testTypeList";
 //     FAIL() << "Index overflows typelist length, TypeAt should not compile";
 // }
+
+TEST(TypeListTest, testAppendTypeToNullTypeShuldReturnTypeListOfLengthOne)
+{
+    //given
+    using InitialTypeList = NullType;
+    using TypeToBeAdded = widgets::ConcreteWidget;
+    constexpr auto expectedTypeListLength = 1;
+    //when
+    using ResultTypeList = TL::Append<InitialTypeList, TypeToBeAdded>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testAppendTypeListToNullTypeShuldReturnTypeListWithLengthOfTypeListAdded)
+{
+    //given
+    using InitialTypeList = NullType;
+    using TypeToBeAdded = TYPELIST_6(widgets::CloneableWidget,int,unsigned, char, widgets::ConcreteWidget,int );    
+    constexpr auto expectedTypeListLength = TL::Length<TypeToBeAdded>::value;
+    //when
+    using ResultTypeList = TL::Append<InitialTypeList, TypeToBeAdded>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testAppendTypeListToNotNullTypeListShuldReturnTypeListWithLengthEqualToSumOfBothTypeLists)
+{
+    //given
+    using InitialTypeList = TYPELIST_2(int, unsigned); 
+    using TypeToBeAdded = TYPELIST_6(widgets::CloneableWidget,int,unsigned, char, widgets::ConcreteWidget,int );    
+    constexpr auto expectedTypeListLength = TL::Length<TypeToBeAdded>::value + TL::Length<InitialTypeList>::value;
+    //when
+    using ResultTypeList = TL::Append<InitialTypeList, TypeToBeAdded>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
