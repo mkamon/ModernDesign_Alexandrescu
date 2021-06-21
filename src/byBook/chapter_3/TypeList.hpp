@@ -132,4 +132,26 @@ namespace TL
         using Result = TypeList<Head, typename EraseAll<Tail, T>::Result>;
     };
     
+    /////////////// Erasing duplicates from a TypeList /////////////
+
+    template <typename TList>
+    struct NoDuplicates;
+
+    template <>
+    struct NoDuplicates<NullType>
+    {
+        using Result = NullType;
+    };
+
+    template <typename Head, typename Tail>
+    struct NoDuplicates<TypeList<Head, Tail>>
+    {
+    private:
+        using L1 = typename NoDuplicates<Tail>::Result;
+        using L2 = typename Erase<L1, Head>::Result;
+    public:
+       using Result = TypeList<Head, L2>;
+    };
+
+
 }

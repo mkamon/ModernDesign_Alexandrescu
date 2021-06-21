@@ -156,3 +156,41 @@ TEST(TypeListTest, testEraseAllTypeThatIsNotOnATypeListShouldReturnSameTypeList)
     //then
     ASSERT_EQ(expectedTypeListLength, length);
 }
+
+TEST(TypeListTest, testNoDuplicatesOnNullTypeShuldReturnNullType)
+{
+    //given
+    using InitialTypeList = NullType; 
+    constexpr auto lengthOfNullType = TL::Length<NullType>::value; 
+    //when
+    using ResultTypeList = TL::NoDuplicates<InitialTypeList>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(lengthOfNullType, length);
+}
+
+TEST(TypeListTest, testNoDuplicatesOnTypeListShouldReturnTypeListShorterByAmountOfDuplicates)
+{
+    //given
+    using InitialTypeList = TYPELIST_7(int, unsigned, widgets::ConcreteWidget, char, widgets::ConcreteWidget, widgets::ConcreteWidget, char); 
+    constexpr auto concreteWidgetDuplicates = 2;
+    constexpr auto charDuplicates = 1;
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value - concreteWidgetDuplicates - charDuplicates; 
+    //when
+    using ResultTypeList = TL::NoDuplicates<InitialTypeList>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testNoDuplicatesOnTypeListWithoutDuplicatesShouldReturnTypeListOftheSameLength)
+{
+    //given
+    using InitialTypeList = TYPELIST_4(int, unsigned, widgets::ConcreteWidget, char); 
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value ; 
+    //when
+    using ResultTypeList = TL::NoDuplicates<InitialTypeList>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
