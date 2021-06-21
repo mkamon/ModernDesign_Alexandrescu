@@ -108,4 +108,28 @@ namespace TL
     {
         using Result = TypeList<Head, typename Erase<Tail, T>::Result>;
     };
+
+    /////////////// Erasing All occurences of a Type from a TypeList /////////////
+
+    template <typename TList, typename T>
+    struct EraseAll;
+
+    template <typename T>
+    struct EraseAll<NullType, T>
+    {
+        using Result = NullType;
+    };
+
+    template <typename T, typename Tail>
+    struct EraseAll<TypeList<T, Tail>, T>
+    {
+        using Result = typename EraseAll<Tail, T>::Result;
+    };
+
+    template <typename Head, typename Tail, typename T>
+    struct EraseAll<TypeList<Head, Tail>, T>
+    {
+        using Result = TypeList<Head, typename EraseAll<Tail, T>::Result>;
+    };
+    
 }
