@@ -78,3 +78,42 @@ TEST(TypeListTest, testAppendTypeListToNotNullTypeListShuldReturnTypeListWithLen
     //then
     ASSERT_EQ(expectedTypeListLength, length);
 }
+
+TEST(TypeListTest, testEraseTypeFromANullTypeShouldReturnNullType)
+{
+    //given
+    using InitialTypeList = NullType; 
+    using TypeToBeDeleted = widgets::ConcreteWidget;
+    constexpr auto lengthOfNullType = TL::Length<NullType>::value; 
+    //when
+    using ResultTypeList = TL::Erase<InitialTypeList, TypeToBeDeleted>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(lengthOfNullType, length);
+}
+
+TEST(TypeListTest, testEraseTypeFromNotNullTypeListShouldReturnTypeListShorterByOne)
+{
+    //given
+    using InitialTypeList = TYPELIST_4(int, unsigned, widgets::ConcreteWidget, char); 
+    using TypeToBeDeleted = widgets::ConcreteWidget;
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value - 1; 
+    //when
+    using ResultTypeList = TL::Erase<InitialTypeList, TypeToBeDeleted>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testEraseTypeThatIsNotOnATypeListShouldReturnSameTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_4(int, unsigned, widgets::ConcreteWidget, char); 
+    using TypeToBeDeleted = widgets::TwoArgsWidget;
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value ; 
+    //when
+    using ResultTypeList = TL::Erase<InitialTypeList, TypeToBeDeleted>::Result; 
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}

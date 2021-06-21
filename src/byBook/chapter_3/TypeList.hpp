@@ -86,4 +86,26 @@ namespace TL
             typename Append<Tail, T>::Result >;
     };
 
+    /////////////// Erasing Type from a TypeList /////////////
+
+    template <typename TList, typename T>
+    struct Erase;
+
+    template <typename T>
+    struct Erase<NullType, T>
+    {
+        using Result = NullType;
+    };
+
+    template <typename Head, typename Tail>
+    struct Erase<TypeList<Head, Tail>, Head>
+    {
+        using Result = Tail;
+    };
+
+    template <typename Head, typename Tail, typename T>
+    struct Erase<TypeList<Head, Tail>, T>
+    {
+        using Result = TypeList<Head, typename Erase<Tail, T>::Result>;
+    };
 }
