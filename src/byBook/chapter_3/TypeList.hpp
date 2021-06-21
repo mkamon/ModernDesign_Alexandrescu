@@ -22,6 +22,8 @@ struct TypeList
 
 namespace TL
 {
+    /////////////// Length /////////////
+
     template <typename TList> 
     struct Length;
     
@@ -36,4 +38,23 @@ namespace TL
     {
         enum { value = 1 + Length<U>::value };
     };
+
+    /////////////// TypeAt /////////////
+
+    template <typename TList, unsigned index>
+    struct TypeAt;
+
+    template <typename Head, typename Tail>
+    struct TypeAt<TypeList<Head, Tail>, 0>
+    {
+        using Result = Head;
+    };
+    
+    template <typename Head, typename Tail, unsigned index>
+    struct TypeAt<TypeList<Head, Tail>, index>
+    {
+        using Result = typename TypeAt<Tail, index - 1>::Result; 
+    };
+
+
 }
