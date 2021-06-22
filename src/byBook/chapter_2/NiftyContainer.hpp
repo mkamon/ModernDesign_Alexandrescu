@@ -1,20 +1,9 @@
 #pragma once
 #include "MapToType.hpp"
+#include "Select.hpp"
 
 namespace typeSpecialization
 {
-
-    template <bool flag, typename T, typename U>
-    struct Select
-    {
-        using Result = T;
-    };
-
-    template <typename T, typename U>
-    struct Select<false, T, U>
-    {
-        using Result = U;
-    };
 
     template <typename T, bool isPolimorphic>
     class NiftyContainer

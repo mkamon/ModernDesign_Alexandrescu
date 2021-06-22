@@ -1,6 +1,8 @@
 #pragma once
 
 #include "chapter_2/NullType.hpp"
+#include "chapter_2/Select.hpp"
+#include "chapter_2/Conversion.hpp"
 
 template <typename T, typename U>
 struct TypeList
@@ -176,4 +178,43 @@ namespace TL
         using Result = TypeList<Head, typename Replace<Tail, T, U>::Result>;
     };
 
+    /////////////// Partial sorting of a TypeList by inheritance hierarchy /////////////
+
+    template <typename TList, typename Base>
+    struct MostDerived;
+
+    template <typename Base>
+    struct MostDerived<NullType, Base>
+    {
+        using Result = Base;
+    };
+
+    template <typename Head, typename Tail, typename Base>
+    struct MostDerived<TypeList<Head, Tail>, Base>
+    {
+    private:
+        using Candidate = typename MostDerived<Tail, Base>::Result;
+        static constexpr bool isHeadAChild = SUPERSUBCLASS(Candidate, Head);
+    public:
+        using Result = typename Select< isHeadAChild, Head, Candidate>::Result;
+    };
+
+    template <typename TList>
+    struct DerivedToFront;
+
+    template <>
+    struct DerivedToFront<NullType>
+    {
+        using Result = NullType;
+    };
+
+    template <typename Head, typename Tail>
+    struct DerivedToFront<TypeList<Head, Tail>>
+    {
+    private:
+        using TheMostDerived = typename MostDerived<Tail, Head>::Result;
+        using L = typename Replace<Tail, TheMostDerived, Head>::Result;
+    public:
+        using Result = TypeList<TheMostDerived, L>;
+    };
 }

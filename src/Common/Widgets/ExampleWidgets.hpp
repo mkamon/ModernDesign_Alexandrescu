@@ -6,6 +6,7 @@ namespace widgets
 {
     constexpr auto defaultWidgetXValue = 3;
     constexpr auto defaultWidgetYValue = 5;
+    constexpr auto defaultWidgetZValue = 7;
     constexpr auto defaultNonPWidgetValue = 10;
 
     class ConcreteWidget
@@ -31,9 +32,20 @@ namespace widgets
     {
         int y = defaultWidgetYValue;
     public:
+        TwoArgsWidget() = default;
         TwoArgsWidget(int x, int y);
 
         [[nodiscard]] int getY() const noexcept;
+    };
+
+    class ThreeArgsWidget : public TwoArgsWidget
+    {
+        int z = defaultWidgetZValue;
+    public:
+        ThreeArgsWidget() = default;
+        ThreeArgsWidget (int x, int y, int z);
+
+        [[nodiscard]] int getZ() const noexcept;
     };
 
     class NonPolimorphicWidget

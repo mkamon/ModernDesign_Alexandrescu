@@ -40,6 +40,17 @@ int TwoArgsWidget::getY() const noexcept
     return y;
 } 
 
+ThreeArgsWidget::ThreeArgsWidget (int x, int y, int z)
+    : TwoArgsWidget(x, y), z{z}
+{
+
+}  
+
+int ThreeArgsWidget::getZ() const noexcept 
+{
+    return z;
+} 
+
 NonPolimorphicWidget::NonPolimorphicWidget(int x)
     : x{x}
 {}
@@ -48,5 +59,3 @@ int NonPolimorphicWidget::getX() const noexcept
 {
     return x;
 }
-
-

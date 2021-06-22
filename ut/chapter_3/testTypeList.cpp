@@ -3,6 +3,7 @@
 #include "chapter_3/TypeList.hpp"
 #include "chapter_3/SpecialTypeLists.hpp"
 #include "Widgets/ExampleWidgets.hpp"
+#include "Utils/PointerHandler.hpp"
 
 
 TEST(TypeListTest, typeListLengthCalculationTest)
@@ -234,4 +235,87 @@ TEST(TypeListTest, testReplaceConcreteWidgetWithTwoArgsWidget)
     ASSERT_EQ(expectedTypeListLength, length);
     ASSERT_EQ(testValueX, widget.getX());
     ASSERT_EQ(testValueY, widget.getY());
+}
+
+TEST(TypeListTest, shouldFindMostDerivedTypeAtTheEndOfTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_3(widgets::ConcreteWidget, widgets::TwoArgsWidget, widgets::ThreeArgsWidget);
+    //when 
+    using ResultType = TL::MostDerived<InitialTypeList, widgets::ConcreteWidget>::Result; 
+    ResultType widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetZValue, widget.getZ());
+}
+
+TEST(TypeListTest, shouldFindMostDerivedTypeInAMiddleOfTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_3(widgets::ConcreteWidget, widgets::ThreeArgsWidget, widgets::TwoArgsWidget);
+    //when 
+    using ResultType = TL::MostDerived<InitialTypeList, widgets::ConcreteWidget>::Result; 
+    ResultType widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetZValue, widget.getZ());
+}
+
+TEST(TypeListTest, shouldFindMostDerivedTypeInTheBeginningOfTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_3(widgets::ThreeArgsWidget, widgets::ConcreteWidget, widgets::TwoArgsWidget);
+    //when 
+    using ResultType = TL::MostDerived<InitialTypeList, widgets::ConcreteWidget>::Result; 
+    ResultType widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetZValue, widget.getZ());
+}
+
+TEST(TypeListTest, shouldFindMostDerivedTypeFromTwoArgsWidgetBranch)
+{
+    //given
+    using InitialTypeList = TYPELIST_5(widgets::ConcreteWidget, widgets::CloneableWidget, widgets::TwoArgsWidget, widgets::NonPolimorphicWidget, widgets::ThreeArgsWidget);
+    //when
+    using ResultType = TL::MostDerived<InitialTypeList, widgets::ConcreteWidget>::Result;
+    ResultType widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetZValue, widget.getZ());
+}
+
+TEST(TypeListTest, shuoldFindMostDerivedTypeFromCloneableWidgetBranch)
+{
+    //given
+    using InitialTypeList = TYPELIST_5(widgets::ConcreteWidget, widgets::TwoArgsWidget, widgets::NonPolimorphicWidget, widgets::ThreeArgsWidget, widgets::CloneableWidget );
+    constexpr auto testValue = 99;
+    //when
+    using ResultType = TL::MostDerived<InitialTypeList, widgets::ConcreteWidget>::Result;
+    ResultType widget(testValue);
+    //then
+    auto clone = utils::wrap_in_unique<widgets::CloneableWidget>(widget.clone());
+    ASSERT_EQ(testValue, widget.getX());
+}
+
+TEST(TypeListTest, shouldPutMostDerivedTypeFromTwoArgsWidgetBranchInTheFrontOfTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_5(widgets::ConcreteWidget, widgets::CloneableWidget, widgets::TwoArgsWidget, widgets::NonPolimorphicWidget, widgets::ThreeArgsWidget);
+    //when
+    using ResultTypeList = TL::DerivedToFront<InitialTypeList>::Result;
+    using ResultType = TL::TypeAt<ResultTypeList, 0>::Result;
+    ResultType widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetZValue, widget.getZ());
+}
+
+TEST(TypeListTest, shuoldPutMostDerivedTypeFromCloneableWidgetBranchInTheFrontOfTypeList)
+{
+    //given
+    using InitialTypeList = TYPELIST_5(widgets::ConcreteWidget, widgets::TwoArgsWidget, widgets::NonPolimorphicWidget, widgets::ThreeArgsWidget, widgets::CloneableWidget );
+    constexpr auto testValue = 99;
+    //when
+    using ResultTypeList = TL::DerivedToFront<InitialTypeList>::Result;
+    using ResultType = TL::TypeAt<ResultTypeList, 0>::Result;
+    ResultType widget(testValue);
+    //then
+    auto clone = utils::wrap_in_unique<widgets::CloneableWidget>(widget.clone());
+    ASSERT_EQ(testValue, widget.getX());
 }
