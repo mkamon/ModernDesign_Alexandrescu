@@ -194,3 +194,44 @@ TEST(TypeListTest, testNoDuplicatesOnTypeListWithoutDuplicatesShouldReturnTypeLi
     //then
     ASSERT_EQ(expectedTypeListLength, length);
 }
+
+TEST(TypeListTest, testReplacingATypeInNullTypeShoulReturnNullType)
+{
+    //given
+    using InitialTypeList = NullType; 
+    constexpr auto expectedTypeListLength = TL::Length<NullType>::value;
+    //when
+    using ResultTypeList = TL::Replace<InitialTypeList, widgets::ConcreteWidget, int>::Result;
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testReplacingATypeShuoldNotChangeTypeListLength)
+{
+    //given
+    using InitialTypeList = TYPELIST_4(int, unsigned, widgets::ConcreteWidget, char);
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value;
+    //when
+    using ResultTypeList = TL::Replace<InitialTypeList, widgets::ConcreteWidget, int>::Result;
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+}
+
+TEST(TypeListTest, testReplaceConcreteWidgetWithTwoArgsWidget)
+{
+    //given
+    using InitialTypeList = TYPELIST_4(int, unsigned, widgets::ConcreteWidget, char);
+    constexpr auto expectedTypeListLength = TL::Length<InitialTypeList>::value;
+    constexpr auto widgetPosition = 2;
+    constexpr auto testValueX = 5, testValueY = 10;
+    //when
+    using ResultTypeList = TL::Replace<InitialTypeList, widgets::ConcreteWidget, widgets::TwoArgsWidget>::Result;
+    constexpr auto length = TL::Length<ResultTypeList>::value;
+    TL::TypeAt<ResultTypeList, widgetPosition>::Result widget(testValueX, testValueY);
+    //then
+    ASSERT_EQ(expectedTypeListLength, length);
+    ASSERT_EQ(testValueX, widget.getX());
+    ASSERT_EQ(testValueY, widget.getY());
+}

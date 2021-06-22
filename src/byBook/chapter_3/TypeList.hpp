@@ -153,5 +153,27 @@ namespace TL
        using Result = TypeList<Head, L2>;
     };
 
+    /////////////// Replacing an Element in a TypeList /////////////
+
+    template <typename TList, typename T, typename U>
+    struct Replace;
+
+    template <typename T, typename U>
+    struct Replace<NullType, T, U>
+    {
+        using Result = NullType;
+    };
+
+    template <typename T, typename Tail, typename U>
+    struct Replace<TypeList<T, Tail>, T, U>
+    {
+        using Result = TypeList<U, Tail>;
+    };
+
+    template <typename Head, typename Tail,typename T, typename U>
+    struct Replace<TypeList<Head, Tail>, T, U>
+    {
+        using Result = TypeList<Head, typename Replace<Tail, T, U>::Result>;
+    };
 
 }
