@@ -9,3 +9,7 @@ add_test( NAME TestSpecialTypeList COMMAND TestSpecialTypeList )
 add_executable( TestGenScatterHierarchy testGenScatterHierarchy.cpp )
 target_link_libraries(TestGenScatterHierarchy  gtest gtest_main ${GTEST_LIBRARIES} pthread commonLib)
 add_test( NAME TestGenScatterHierarchy COMMAND TestGenScatterHierarchy )
+
+add_executable( TestGenLinearHierarchy testGenLinearHierarchy.cpp )
+target_link_libraries(TestGenLinearHierarchy gtest gtest_main ${GTEST_LIBRARIES} pthread commonLib)
+add_test( NAME TestGenLinearHierarchy COMMAND TestGenLinearHierarchy )
