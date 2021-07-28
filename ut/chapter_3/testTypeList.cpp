@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <typeinfo>
 
 #include "chapter_3/TypeList.hpp"
 #include "chapter_3/SpecialTypeLists.hpp"
@@ -318,4 +319,28 @@ TEST(TypeListTest, shuoldPutMostDerivedTypeFromCloneableWidgetBranchInTheFrontOf
     //then
     auto clone = utils::wrap_in_unique<widgets::CloneableWidget>(widget.clone());
     ASSERT_EQ(testValue, widget.getX());
+}
+
+
+TEST(TypeListTest, typeListTypeAtNonStrictIndexShouldReturnConcreteWidget)
+{
+    //given
+    using TestTypeList = TYPELIST_6(widgets::CloneableWidget,int,unsigned, char, widgets::ConcreteWidget,int );    
+    constexpr auto index = 4;
+    //when
+    TL::TypeAtNonStrict<TestTypeList, index, EmptyType>::Result widget;
+    //then
+    ASSERT_EQ(widgets::defaultWidgetXValue, widget.getX()); 
+}
+
+TEST(TypeListTest, typeListAtNonStrictOverflowingIndexShouldReturnFallbackType)
+{
+    //given
+    using TestTypeList = TYPELIST_6(widgets::CloneableWidget,int,unsigned, char, widgets::ConcreteWidget,int );    
+    using FallbackType = EmptyType;
+    constexpr auto index = 18;
+    //when
+    TL::TypeAtNonStrict<TestTypeList, index, FallbackType>::Result widget;
+    //then
+    ASSERT_TRUE(typeid(widget) == typeid(EmptyType));
 }

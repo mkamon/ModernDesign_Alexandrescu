@@ -58,6 +58,29 @@ namespace TL
         using Result = typename TypeAt<Tail, index - 1>::Result; 
     };
 
+    /////////////// TypeAtNonStrict /////////////
+
+    template <typename TList, unsigned index, typename Other>
+    struct TypeAtNonStrict;
+    
+    template <unsigned index, typename FallbackType >
+    struct TypeAtNonStrict<NullType, index, FallbackType>
+    {
+        using Result = FallbackType;
+    };
+
+    template <typename Head, typename Tail, typename FallbackType>
+    struct TypeAtNonStrict<TypeList<Head, Tail>, 0, FallbackType>
+    {
+        using Result = Head;
+    };
+    
+    template <typename Head, typename Tail, unsigned index, typename FallbackType>
+    struct TypeAtNonStrict<TypeList<Head, Tail>, index, FallbackType>
+    {
+        using Result = typename TypeAtNonStrict<Tail, index - 1, FallbackType>::Result; 
+    };
+
     /////////////// Appending to TypeList /////////////
 
     template <typename TList, typename T>

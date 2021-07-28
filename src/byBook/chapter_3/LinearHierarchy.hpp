@@ -39,5 +39,5 @@ template
     typename Root
 >
 class GenLinearHierarchy<NullType, Unit, Root>
-    : public Root;
+    : public Root
 {};

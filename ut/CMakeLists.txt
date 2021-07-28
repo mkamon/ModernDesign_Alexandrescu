@@ -9,6 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/byBook)
 add_subdirectory(chapter_1)
 add_subdirectory(chapter_2)
 add_subdirectory(chapter_3)
+add_subdirectory(chapter_5)
 
 add_executable( testMain testMain.cpp )
 target_link_libraries( testMain  gtest gtest_main ${GTEST_LIBRARIES} pthread dummyLib)
