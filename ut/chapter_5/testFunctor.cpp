@@ -57,5 +57,20 @@ TEST_F(TestFunctorBaseFunctionality, shallCallFunctionOverload)
     ASSERT_EQ(input1, cmd(input1));
 }
 
+const char* testFunction2(char a, char b)
+{
+    static const char buffer[2]{a, b};
+    return buffer;
+}
+
+TEST(TestFunctor, shallUseLanguageConversion)
+{
+    //given
+    const char a{'a'}, b{'b'};
+    const std::string expected{"ab"};
+    Functor<std::string, TYPELIST_2(char, char)> cmd(&testFunction2);
+    //when & then
+    ASSERT_EQ(expected, cmd(a,b));
+}
 
 }
