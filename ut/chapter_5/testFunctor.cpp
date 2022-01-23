@@ -73,4 +73,45 @@ TEST(TestFunctor, shallUseLanguageConversion)
     ASSERT_EQ(expected, cmd(a,b));
 }
 
+class TestMemberSubject
+{
+    constexpr static auto timesTenMultiplier{10};
+    constexpr static auto timesHoundredMultiplier{100};
+public:
+    int multiplyByTen(int x)
+    {
+        return x * timesTenMultiplier;
+    }
+
+    int multiplyByHoundred(int x)
+    {
+        return x * timesHoundredMultiplier;
+    }
+};
+
+class TestFunctorWithMember : public Test
+{
+protected:
+    static constexpr auto testInput{4};
+    static constexpr auto expectedMultipliedByTen{testInput * 10};
+    static constexpr auto expectedMultipliedByHoundred{testInput * 100};
+};
+
+TEST_F(TestFunctorWithMember, testCallToMultiplyByTen)
+{
+    //given
+    TestMemberSubject testSubject;
+    Functor<int, TYPELIST_1(int)> cmd(&testSubject, &TestMemberSubject::multiplyByTen);
+    //when & then
+    ASSERT_EQ(expectedMultipliedByTen, cmd(testInput));
+}
+
+TEST_F(TestFunctorWithMember, testCallToMultiplyByHoundred)
+{
+    //given
+    TestMemberSubject testSubject;
+    Functor<int, TYPELIST_1(int)> cmd(&testSubject, &TestMemberSubject::multiplyByHoundred);
+    //when & then
+    ASSERT_EQ(expectedMultipliedByHoundred, cmd(testInput));
+}
 }

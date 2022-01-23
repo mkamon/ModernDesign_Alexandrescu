@@ -77,6 +77,44 @@ private:
     Fun fun;
 };
 
+template <typename ParentFunctor, typename PointerToObj, typename PointerToMemFn>
+class MemFunHandler : public FunctorImpl
+    <
+        typename ParentFunctor::ResultType,
+        typename ParentFunctor::ParamList
+    >
+{
+public:
+    using ResultType = typename ParentFunctor::ResultType;
+
+    MemFunHandler(const PointerToObj& pObj, PointerToMemFn pMemFn)
+        : pObj{pObj}, pMemFn{pMemFn}
+    {}
+
+    MemFunHandler* clone() const override
+    {
+        return new MemFunHandler(*this);
+    }
+
+    ResultType operator()()
+    {
+        return ((*pObj).*pMemFn)();
+    }
+
+    ResultType operator()(typename ParentFunctor::Param1 p1)
+    {
+        return ((*pObj).*pMemFn)(p1);
+    }
+
+    ResultType operator()(typename ParentFunctor::Param1 p1, typename ParentFunctor::Param2 p2)
+    {
+        return ((*pObj).*pMemFn)(p1, p2);
+    }
+private:
+    PointerToObj pObj;
+    PointerToMemFn pMemFn;
+};
+
 template <typename R, class TList>
 class Functor
 {
@@ -93,6 +131,9 @@ public:
 
     template <typename Fun>
     Functor(const Fun&);
+
+    template <typename PtrObj, typename MemFun>
+    Functor(const PtrObj&, const MemFun&);
 
     Functor &operator=(const Functor&);
     explicit Functor(std::unique_ptr<Impl> pImpl);
@@ -117,3 +158,9 @@ Functor<R, TList>::Functor(const Fun& fun)
     : pImpl{std::make_unique<FunctorHandler<Functor, Fun>>(fun)}
 {
 }
+
+template <typename R, class TList>
+template <typename PtrObj, typename MemFun>
+Functor<R, TList>::Functor(const PtrObj& p, const MemFun& memFn)
+    : pImpl{std::make_unique<MemFunHandler<Functor, PtrObj, MemFun>>(p, memFn)}
+{};
